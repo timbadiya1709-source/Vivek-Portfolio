@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vivek Timbadiya — Game Developer Portfolio</title>
+  <meta name="description" content="Portfolio of Vivek Timbadiya — Unity & C# game developer. Projects, videos, and contact." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --panel: #11151a;
+      --soft: #161b22;
+      --text: #e6eaf0;
+      --muted: #aab2bf;
+      --brand: #7c3aed; /* violet-600 */
+      --brand-2: #22d3ee; /* cyan-400 */
+      --ok: #10b981; /* emerald */
+      --warn: #f59e0b; /* amber */
+      --danger: #ef4444; /* red */
+      --radius: 18px;
+      --shadow: 0 8px 30px rgba(0,0,0,.35);
+      --shadow-soft: 0 4px 18px rgba(0,0,0,.25);
+      --maxw: 1200px;
+    }
+
+    /* Reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; background: radial-gradient(1200px 800px at 100% -10%, rgba(124,58,237,.08), transparent),
+                                  radial-gradient(800px 600px at -10% 110%, rgba(34,211,238,.08), transparent),
+                                  var(--bg);
+      color: var(--text); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      line-height: 1.6; letter-spacing: .1px;
+    }
+    img { max-width: 100%; display: block; border-radius: 14px; }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(100% - 32px, var(--maxw)); margin-inline: auto; }
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem; padding: .75rem 1rem;
+      border-radius: 14px; background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      border: none; color: white; font-weight: 600; box-shadow: var(--shadow-soft);
+      cursor: pointer; transition: transform .12s ease, filter .2s ease, box-shadow .2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.04); box-shadow: var(--shadow); }
+    .btn.ghost { background: transparent; border: 1px solid #263041; color: var(--text); }
+    .btn.small { padding: .55rem .8rem; font-size: .95rem; }
+
+    /* Header / Nav */
+    header {
+      position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(11,13,16,.8), rgba(11,13,16,.35));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .nav { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; }
+    .brand { display:flex; align-items:center; gap:.75rem; font-weight: 800; letter-spacing: .3px; }
+    .logo {
+      width: 38px; height: 38px; display: grid; place-items: center;
+      background: conic-gradient(from 180deg, var(--brand), var(--brand-2));
+      border-radius: 12px; box-shadow: var(--shadow-soft);
+      font-family: "JetBrains Mono", monospace; font-weight: 700;
+    }
+    nav ul { display: flex; gap: 1rem; list-style: none; margin: 0; padding: 0; }
+    nav a { padding: .6rem .8rem; border-radius: 10px; color: var(--muted); font-weight: 600; }
+    nav a:hover, nav a.active { color: var(--text); background: #1a202a; }
+    .nav-cta { display:flex; gap:.6rem; }
+
+    /* Hero */
+    .hero { padding: 64px 0 24px; }
+    .hero .wrap { display: grid; grid-template-columns: 1.2fr .8fr; gap: 32px; align-items: center; }
+    h1 { font-size: clamp(2rem, 2.6vw + 1rem, 3.5rem); line-height: 1.1; margin: 0 0 10px; font-weight: 900; }
+    .kicker { display:inline-block; padding:.3rem .7rem; border:1px solid #263041; border-radius: 999px; color: var(--muted); font-weight:600; margin-bottom: 12px; }
+    .lead { font-size: clamp(1.05rem, .6vw + .9rem, 1.2rem); color: var(--muted); margin-bottom: 18px; }
+    .skills { display: flex; flex-wrap: wrap; gap: .5rem; margin: 20px 0 0; }
+    .pill { border:1px solid #2a3344; padding:.35rem .6rem; border-radius: 999px; font-size:.9rem; color: #c5ccda; }
+    .hero-card { background: linear-gradient(180deg, #0e1217, #0b0d10); border: 1px solid #1f2633; border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-soft); }
+    .hero-thumb { aspect-ratio: 16/9; background: #0e1116; border:1px solid #1c2130; border-radius: 12px; display:grid; place-items:center; color:#6b7280; font-weight:600; }
+
+    /* Sections */
+    section { padding: 56px 0; }
+    .section-head { display:flex; align-items:baseline; justify-content: space-between; margin-bottom: 18px; }
+    .section-head h2 { margin: 0; font-size: clamp(1.6rem, 1.4vw + 1rem, 2.2rem); }
+    .section-head p { margin: 0; color: var(--muted); }
+
+    /* Projects Grid */
+    .grid { display: grid; gap: 18px; }
+    .grid.projects { grid-template-columns: repeat(12, 1fr); }
+    .card { grid-column: span 12; background: var(--panel); border: 1px solid #1f2633; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-soft); }
+    .card .media { position: relative; }
+    .card .media img { aspect-ratio: 16/9; width: 100%; object-fit: cover; }
+    .badge { position: absolute; inset: 12px auto auto 12px; background: rgba(0,0,0,.6); border:1px solid rgba(255,255,255,.12); color: #e5e7eb; padding: .35rem .6rem; border-radius: 999px; font-size: .85rem; backdrop-filter: blur(6px); }
+    .card .body { padding: 14px 14px 16px; }
+    .card h3 { margin: 0 0 6px; font-size: 1.2rem; }
+    .meta { display:flex; gap:.5rem; flex-wrap: wrap; margin: 6px 0 10px; }
+    .tag { font-size: .85rem; color: #cbd5e1; border: 1px solid #273246; padding: .25rem .5rem; border-radius: 999px; }
+    .desc { color: var(--muted); margin: 8px 0 12px; }
+    .actions { display:flex; flex-wrap: wrap; gap: .5rem; }
+
+    /* Details accordion for each project */
+    details { background: var(--soft); border: 1px solid #202837; border-radius: 14px; padding: .8rem 1rem; margin-top: .6rem; }
+    details summary { cursor: pointer; font-weight: 700; color: #d1d5db; }
+    details p, details ul { color: #c4cbd7; }
+
+    /* About */
+    .about { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .about .panel { background: var(--panel); border:1px solid #1f2633; border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow-soft); }
+    .list { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:.5rem; }
+    .list .li { background:#121821; border:1px solid #1e2533; border-radius:10px; padding:.5rem .6rem; }
+
+    /* Contact */
+    .contact { display: grid; grid-template-columns: 1.2fr .8fr; gap: 22px; }
+    form { display: grid; gap: .8rem; }
+    input, textarea {
+      background:#0f141b; border:1px solid #20283a; color:var(--text); padding:.85rem 1rem; border-radius:12px; font-size:1rem;
+    }
+    textarea { min-height: 140px; resize: vertical; }
+
+    footer { padding: 32px 0 64px; color: var(--muted); text-align:center; }
+
+    /* Responsive */
+    @media (min-width: 640px) {
+      .card { grid-column: span 6; }
+    }
+    @media (min-width: 1024px) {
+      .card { grid-column: span 4; }
+    }
+    @media (max-width: 860px) {
+      .hero .wrap, .about, .contact { grid-template-columns: 1fr; }
+      nav ul { display:none; }
+      .nav-cta { display:none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ============ Header ============ -->
+  <header id="top">
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo">VT</div>
+        <div>
+          <div style="font-weight:800">Vivek Timbadiya</div>
+          <div style="font-size:.9rem;color:var(--muted);margin-top:-4px">Unity & C# Game Developer</div>
+        </div>
+      </div>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a class="active" href="#projects">Projects</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#resume">Resume</a></li>
+        </ul>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn small" href="#contact">Hire Me</a>
+        <a class="btn small ghost" href="mailto:vt.example@mail.com">Email</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ Hero ============ -->
+  <section class="hero container">
+    <div class="wrap">
+      <div>
+        <span class="kicker">👋 Hi, I’m Vivek</span>
+        <h1>Building playful, responsive games with <span style="background:linear-gradient(90deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent">Unity & C#</span></h1>
+        <p class="lead">Second-year pharmacy student turned game dev. I love prototyping tight controls, juicy feedback (VFX/SFX), and clean, scalable code. Below are a few projects with screenshots, short videos, and notes on what I built.</p>
+        <div class="skills">
+          <span class="pill">Unity</span><span class="pill">C#</span><span class="pill">2D/3D</span>
+          <span class="pill">Mobile (Android)</span><span class="pill">Physics</span><span class="pill">UI/UX</span>
+        </div>
+        <div style="display:flex; gap:.6rem; margin-top:18px;">
+          <a class="btn" href="#projects">See Projects</a>
+          <a class="btn ghost" href="#contact">Get in touch</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-thumb">Add a hero GIF or collage here</div>
+        <p style="color:var(--muted); margin:.6rem 0 0">Tip: export short gameplay clips (15–30s) per project using OBS or Unity Recorder, and place a highlight here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Projects ============ -->
+  <section id="projects" class="container">
+    <div class="section-head">
+      <h2>Projects</h2>
+      <p>3–6 hand-picked games. Each card includes screenshots, video, and what I did.</p>
+    </div>
+
+    <div class="grid projects">
+      <!-- Project 1: Gyro Ball Roll -->
+      <article class="card" aria-labelledby="p1-title">
+        <div class="media">
+          <!-- Replace src with your screenshot (16:9 works best). You can also use animated GIF. -->
+          <img src="assets/gyro-ball-thumb.jpg" alt="Gyro Ball Roll gameplay screenshot" />
+          <span class="badge">Mobile • 3D</span>
+        </div>
+        <div class="body">
+          <h3 id="p1-title">Gyro Ball Roll</h3>
+          <div class="meta">
+            <span class="tag">Unity</span>
+            <span class="tag">C#</span>
+            <span class="tag">Gyroscope</span>
+            <span class="tag">Physics</span>
+          </div>
+          <p class="desc">A 3D Android game where the player tilts the device to roll a ball through obstacles and reach the finish pad. Includes reset-on-wall-collision, sound design, and finish logic.</p>
+          <div class="actions">
+            <a class="btn small" href="#" target="_blank" rel="noreferrer">Play (APK)</a>
+            <a class="btn small ghost" href="#" target="_blank" rel="noreferrer">Watch Video</a>
+            <a class="btn small ghost" href="#" target="_blank" rel="noreferrer">GitHub</a>
+          </div>
+          <details>
+            <summary>What I built</summary>
+            <ul>
+              <li>Gyro-based input and smoothing for precise control.</li>
+              <li>Obstacle & wall collision system; auto-reset to spawn.</li>
+              <li>Finish pad trigger → level complete flow.</li>
+              <li>Juice: SFX, subtle camera follow with lag, and UI feedback.</li>
+            </ul>
+          </details>
+        </div>
+      </article>
+
+      <!-- Project 2: Knife Hit Clone -->
+      <article class="card" aria-labelledby="p2-title">
+        <div class="media">
+          <img src="assets/knife-hit-thumb.jpg" alt="Knife Hit style game screenshot" />
+          <span class="badge">Mobile • 2D</span>
+        </div>
+        <div class="body">
+          <h3 id="p2-title">Knife Hit — Sticky Log</h3>
+          <div class="meta">
+            <span class="tag">Unity</span>
+            <span class="tag">C#</span>
+            <span class="tag">Pooling</span>
+          </div>
+          <p class="desc">Tap to throw knives at a rotating log. Knives stick on hit, lose on overlap. Increasing difficulty with speed curves and boss logs.</p>
+          <div class="actions">
+            <a class="btn small" href="#" target="_blank" rel="noreferrer">Play (WebGL)</a>
+            <a class="btn small ghost" href="#" target="_blank" rel="noreferrer">Watch Video</a>
+            <a class="btn small ghost" href="#" target="_blank" rel="noreferrer">GitHub</a>
+          </div>
+          <details>
+            <summary>What I built</summary>
+            <ul>
+              <li>Knife throw physics + sticky logic on collider hit.</li>
+              <li>Object pooling for performance on mobile.</li>
+              <li>Combo scoring, slow‑mo on boss defeat, and particles.</li>
+            </ul>
+          </details>
+        </div>
+      </article>
+
+      <!-- Project 3: 3D Car Simulator -->
+      <article class="card" aria-labelledby="p3-title">
+        <div class="media">
+          <img src="assets/car-sim-thumb.jpg" alt="3D Car Simulator screenshot" />
+          <span class="badge">PC • 3D</span>
+        </div>
+        <div class="body">
+          <h3 id="p3-title">3D Car Simulator</h3>
+          <div class="meta">
+            <span class="tag">Unity</span>
+            <span class="tag">C#</span>
+            <span class="tag">Vehicle Physics</span>
+          </div>
+          <p class="desc">Free‑drive car sim with turning front wheels, wheel rotation, engine‑pitch by speed, and a smooth follow camera with rotational lag.</p>
+          <div class="actions">
+            <a class="btn small" href="#" target="_blank" rel="noreferrer">Download (Windows)</a>
+            <a class="btn small ghost" href="#" target="_blank" rel="noreferrer">Watch Video</a>
+            <a class="btn small ghost" href="#" target="_blank" rel="noreferrer">GitHub</a>
+          </div>
+          <details>
+            <summary>What I built</summary>
+            <ul>
+              <li>Custom car controller with gradual deceleration.</li>
+              <li>Engine audio pitch mapped to speed.</li>
+              <li>Follow camera with forward lag and rotation sync.</li>
+              <li>Modular inputs; easy to add touch controls.</li>
+            </ul>
+          </details>
+        </div>
+      </article>
+
+      <!-- Add more project cards by duplicating one of the <article class="card"> blocks above. -->
+    </div>
+  </section>
+
+  <!-- ============ About ============ -->
+  <section id="about" class="container">
+    <div class="section-head">
+      <h2>About Me</h2>
+      <p>Short, focused, and honest.</p>
+    </div>
+    <div class="about">
+      <div class="panel">
+        <h3 style="margin-top:0">Who I am</h3>
+        <p>I’m Vivek, a second‑year student at Silver Oak College of Pharmacy and a self‑taught Unity developer. I enjoy building tight gameplay loops, clean code structures, and juicy feedback with VFX/SFX. My goal this year is to ship 2–3 polished mobile games to the Play Store.</p>
+      </div>
+      <div class="panel">
+        <h3 style="margin-top:0">Skills & Tools</h3>
+        <div class="list">
+          <div class="li">Unity (2D/3D)</div>
+          <div class="li">C#</div>
+          <div class="li">Physics & Collisions</div>
+          <div class="li">Mobile (Android)</div>
+          <div class="li">UI Toolkit / uGUI</div>
+          <div class="li">Audio (SFX/Music)</div>
+          <div class="li">Version Control (Git)</div>
+          <div class="li">Optimization & Pooling</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Resume (download) ============ -->
+  <section id="resume" class="container">
+    <div class="section-head">
+      <h2>Resume</h2>
+      <p>1‑page PDF is best. Keep it updated.</p>
+    </div>
+    <div class="hero-card" style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+      <p style="margin:0; color:var(--muted)">Upload your <code>Vivek_Timbadiya_Resume.pdf</code> to the root or <code>assets/</code> and link it here.</p>
+      <a class="btn" href="assets/Vivek_Timbadiya_Resume.pdf" download>Download Resume</a>
+    </div>
+  </section>
+
+  <!-- ============ Contact ============ -->
+  <section id="contact" class="container">
+    <div class="section-head">
+      <h2>Contact</h2>
+      <p>Reach out for internships, freelance, or collaborations.</p>
+    </div>
+    <div class="contact">
+      <form name="contact" onsubmit="event.preventDefault(); window.location.href='mailto:vt.example@mail.com?subject=Portfolio%20Inquiry%20—%20Vivek&body=Hi%20Vivek,%0D%0A%0D%0A';">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea placeholder="Message"></textarea>
+        <button class="btn" type="submit">Send Email</button>
+      </form>
+      <div class="hero-card">
+        <h3 style="margin-top:0">Elsewhere</h3>
+        <p class="desc" style="margin-top:0">Add your profiles and builds:</p>
+        <div class="actions">
+          <a class="btn small ghost" href="#" target="_blank" rel="noreferrer">Itch.io</a>
+          <a class="btn small ghost" href="#" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="btn small ghost" href="#" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a class="btn small ghost" href="#" target="_blank" rel="noreferrer">Play Store</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="container">
+    <div>© <span id="year"></span> Vivek Timbadiya — Built with HTML & CSS</div>
+  </footer>
+
+  <script>
+    // Set current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Optional: smooth scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.querySelectorAll('nav a').forEach(x => x.classList.remove('active'));
+          a.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
